@@ -30,6 +30,7 @@ public class User {
     private String name;
 
     @OneToMany(mappedBy = "author", fetch = FetchType.LAZY, cascade = CascadeType.ALL,  orphanRemoval = true)
+    @Builder.Default
     private List<Post> posts = new ArrayList<>();
 
     @Column(nullable = false, name = "created_at")

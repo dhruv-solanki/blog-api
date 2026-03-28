@@ -1,13 +1,15 @@
 package com.dhruv.blog.controller;
 
 import com.dhruv.blog.domain.dto.CategoryDto;
+import com.dhruv.blog.domain.dto.CreateCategoryRequest;
+import com.dhruv.blog.domain.entity.Category;
 import com.dhruv.blog.mapper.CategoryMapper;
 import com.dhruv.blog.service.CategoryService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -24,5 +26,21 @@ public class CategoryController {
                 .stream().map(categoryMapper::toDto)
                 .toList();
         return ResponseEntity.ok(categoryDtos);
+    }
+
+    @PostMapping
+    public ResponseEntity<CategoryDto> createCategory(
+        @Valid @RequestBody CreateCategoryRequest createCategoryRequest
+    ) {
+        Category categoryToCreate = categoryMapper.toEntity(createCategoryRequest);
+        Category savedCategory = categoryService.createCategory(categoryToCreate);
+        CategoryDto categoryDto = categoryMapper.toDto(savedCategory);
+        return new ResponseEntity<>(categoryDto, HttpStatus.CREATED);
+    }
+
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity<Void> deleteCategory(@PathVariable Long id) {
+        categoryService.deleteCategory(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
