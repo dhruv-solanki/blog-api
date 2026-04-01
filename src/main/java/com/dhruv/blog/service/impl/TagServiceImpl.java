@@ -5,6 +5,7 @@ import com.dhruv.blog.repository.TagRepository;
 import com.dhruv.blog.service.TagService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -45,5 +46,16 @@ public class TagServiceImpl implements TagService {
         savedTags.addAll(existingTags);
 
         return savedTags;
+    }
+
+    @Transactional
+    @Override
+    public void deleteTag(Long id) {
+        tagRepository.findById(id).ifPresent(tag -> {
+            if(!tag.getPosts().isEmpty()) {
+                throw new IllegalStateException("Cannot delete tag with posts");
+            }
+            tagRepository.deleteById(id);
+        });
     }
 }

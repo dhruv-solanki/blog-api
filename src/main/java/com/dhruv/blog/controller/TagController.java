@@ -32,4 +32,10 @@ public class TagController {
         List<TagResponse> createdTagResponses  = savedTags.stream().map(tagMapper::toTagResponse).toList();
         return new ResponseEntity<>(createdTagResponses, HttpStatus.CREATED);
     }
+
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity<Void> deleteTag(@PathVariable Long id) {
+        tagService.deleteTag(id);
+        return ResponseEntity.noContent().build();
+    }
 }
