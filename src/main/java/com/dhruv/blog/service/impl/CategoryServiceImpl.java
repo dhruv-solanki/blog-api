@@ -3,6 +3,7 @@ package com.dhruv.blog.service.impl;
 import com.dhruv.blog.domain.entity.Category;
 import com.dhruv.blog.repository.CategoryRepository;
 import com.dhruv.blog.service.CategoryService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -37,5 +38,11 @@ public class CategoryServiceImpl implements CategoryService {
             categoryRepository.deleteById(id);
         }
         throw new IllegalArgumentException("Category with ID: "  + id + " does not exist");
+    }
+
+    @Override
+    public Category getCategoryById(Long id) {
+        return categoryRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Category not found with id: " + id));
     }
 }

@@ -1,7 +1,7 @@
 package com.dhruv.blog.controller;
 
 import com.dhruv.blog.domain.dto.CreateTagsRequest;
-import com.dhruv.blog.domain.dto.TagResponse;
+import com.dhruv.blog.domain.dto.TagDto;
 import com.dhruv.blog.domain.entity.Tag;
 import com.dhruv.blog.mapper.TagMapper;
 import com.dhruv.blog.service.TagService;
@@ -20,16 +20,16 @@ public class TagController {
     private final TagMapper tagMapper;
 
     @GetMapping
-    public ResponseEntity<List<TagResponse>> getAllTags() {
+    public ResponseEntity<List<TagDto>> getAllTags() {
         List<Tag> tags = tagService.getTags();
-        List<TagResponse> tagResponses = tags.stream().map(tagMapper::toTagResponse).toList();
-        return ResponseEntity.ok(tagResponses);
+        List<TagDto> tagResponse = tags.stream().map(tagMapper::toTagResponse).toList();
+        return ResponseEntity.ok(tagResponse);
     }
 
     @PostMapping
-    public ResponseEntity<List<TagResponse>> createTags(@RequestBody CreateTagsRequest createTagsRequest) {
+    public ResponseEntity<List<TagDto>> createTags(@RequestBody CreateTagsRequest createTagsRequest) {
         List<Tag> savedTags = tagService.createTags(createTagsRequest.getNames());
-        List<TagResponse> createdTagResponses  = savedTags.stream().map(tagMapper::toTagResponse).toList();
+        List<TagDto> createdTagResponses = savedTags.stream().map(tagMapper::toTagResponse).toList();
         return new ResponseEntity<>(createdTagResponses, HttpStatus.CREATED);
     }
 

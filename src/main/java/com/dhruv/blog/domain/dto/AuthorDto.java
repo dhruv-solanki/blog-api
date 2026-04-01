@@ -9,8 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class TagResponse {
+public class AuthorDto {
     private Long id;
     private String name;
-    private Integer postCount;
 }
