@@ -1,5 +1,6 @@
 package com.dhruv.blog.service.impl;
 
+import com.dhruv.blog.domain.CreatePostRequest;
 import com.dhruv.blog.domain.PostStatus;
 import com.dhruv.blog.domain.entity.Category;
 import com.dhruv.blog.domain.entity.Post;
@@ -58,5 +59,15 @@ public class PostServiceImpl implements PostService {
     @Override
     public List<Post> getDraftPosts(User user) {
         return postRepository.findAllByStatusAndAuthor(PostStatus.DRAFT, user);
+    }
+
+    @Override
+    public Post createPost(User user, CreatePostRequest request) {
+//        Post.builder()
+//                .title(request.getTitle())
+//                .content(request.getContent())
+//                .status(request.getStatus())
+//                .author(user)
+//                .readingTime()
     }
 }

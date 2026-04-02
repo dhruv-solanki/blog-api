@@ -1,5 +1,6 @@
 package com.dhruv.blog.service;
 
+import com.dhruv.blog.domain.CreatePostRequest;
 import com.dhruv.blog.domain.entity.Post;
 import com.dhruv.blog.domain.entity.User;
 
@@ -9,4 +10,6 @@ public interface PostService {
     List<Post> getAllPosts(Long categoryId, Long tagId);
 
     List<Post> getDraftPosts(User user);
+
+    Post createPost(User user, CreatePostRequest createPostRequest);
 }

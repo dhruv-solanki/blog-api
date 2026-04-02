@@ -1,5 +1,7 @@
 package com.dhruv.blog.controller;
 
+import com.dhruv.blog.domain.CreatePostRequest;
+import com.dhruv.blog.domain.dto.CreatePostRequestDto;
 import com.dhruv.blog.domain.dto.PostDto;
 import com.dhruv.blog.domain.entity.Post;
 import com.dhruv.blog.domain.entity.User;
@@ -28,6 +30,15 @@ public class PostController {
         List<Post> posts = postService.getAllPosts(categoryId, tagId);
         List<PostDto> postDtos = posts.stream().map(postMapper::toDto).toList();
         return ResponseEntity.ok(postDtos);
+    }
+
+    @PostMapping
+    public ResponseEntity<PostDto> createPost(
+        @RequestBody CreatePostRequestDto createPostRequestDto,
+        @RequestAttribute Long userId
+    ) {
+        User loggedInUser = userService.getUserById(userId);
+        CreatePostRequest createPostRequest = postMapper.toCreatePostRequest(createPostRequestDto);
     }
 
     @GetMapping(path = "/drafts")
