@@ -4,6 +4,7 @@ import com.dhruv.blog.domain.PostStatus;
 import com.dhruv.blog.domain.entity.Category;
 import com.dhruv.blog.domain.entity.Post;
 import com.dhruv.blog.domain.entity.Tag;
+import com.dhruv.blog.domain.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -18,4 +19,6 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> findAllByStatusAndTagsContaining(PostStatus status, Tag tag);
 
     List<Post> findAllByStatus(PostStatus status);
+
+    List<Post> findAllByStatusAndAuthor(PostStatus status, User author);
 }

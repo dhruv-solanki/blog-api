@@ -4,6 +4,7 @@ import com.dhruv.blog.domain.PostStatus;
 import com.dhruv.blog.domain.entity.Category;
 import com.dhruv.blog.domain.entity.Post;
 import com.dhruv.blog.domain.entity.Tag;
+import com.dhruv.blog.domain.entity.User;
 import com.dhruv.blog.repository.PostRepository;
 import com.dhruv.blog.service.CategoryService;
 import com.dhruv.blog.service.PostService;
@@ -52,5 +53,10 @@ public class PostServiceImpl implements PostService {
         }
 
         return postRepository.findAllByStatus(PostStatus.PUBLISHED);
+    }
+
+    @Override
+    public List<Post> getDraftPosts(User user) {
+        return postRepository.findAllByStatusAndAuthor(PostStatus.DRAFT, user);
     }
 }
