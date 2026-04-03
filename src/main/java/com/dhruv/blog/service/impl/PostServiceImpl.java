@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.List;
 
 @Service
@@ -22,6 +23,8 @@ public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
     private final CategoryService categoryService;
     private final TagService tagService;
+
+    private static final int WORDS_PER_MINUTE = 200;
 
     @Override
     @Transactional(readOnly = true)
@@ -63,11 +66,28 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Post createPost(User user, CreatePostRequest request) {
-//        Post.builder()
-//                .title(request.getTitle())
-//                .content(request.getContent())
-//                .status(request.getStatus())
-//                .author(user)
-//                .readingTime()
+        Category category = categoryService.getCategoryById(request.getCategoryId());
+        List<Tag> tags = tagService.getTagByIds(request.getTagIds());
+
+        Post newPost = Post.builder()
+                .title(request.getTitle())
+                .content(request.getContent())
+                .status(request.getStatus())
+                .author(user)
+                .readingTime(calculateReadingTime(request.getContent()))
+                .category(category)
+                .tags(new HashSet<>(tags))
+                .build();
+
+        return postRepository.save(newPost);
+    }
+
+    private Integer calculateReadingTime(String content) {
+        if(content == null || content.isEmpty()) {
+            return 0;
+        }
+
+        int wordCount = content.trim().split("\\s+").length;
+        return (int) Math.ceil((double) wordCount / WORDS_PER_MINUTE);
     }
 }

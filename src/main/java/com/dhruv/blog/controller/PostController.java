@@ -9,6 +9,7 @@ import com.dhruv.blog.mapper.PostMapper;
 import com.dhruv.blog.service.PostService;
 import com.dhruv.blog.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,6 +40,9 @@ public class PostController {
     ) {
         User loggedInUser = userService.getUserById(userId);
         CreatePostRequest createPostRequest = postMapper.toCreatePostRequest(createPostRequestDto);
+        Post createdPost = postService.createPost(loggedInUser, createPostRequest);
+        PostDto createdPostDto = postMapper.toDto(createdPost);
+        return new ResponseEntity<>(createdPostDto, HttpStatus.CREATED);
     }
 
     @GetMapping(path = "/drafts")
