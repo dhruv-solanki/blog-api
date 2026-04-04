@@ -1,0 +1,14 @@
+spring.application.name=blog
+
+jwt.secret=your-256-bit-secret-key-here-it-at-least-32-bytes-long
+
+# Database Connection
+spring.datasource.url=jdbc:postgresql://ip:port/app_name
+spring.datasource.username=username
+spring.datasource.password=password
+
+# JPA Configuration
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.format_sql=true
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
