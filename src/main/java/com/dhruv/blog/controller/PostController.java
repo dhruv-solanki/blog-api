@@ -66,6 +66,12 @@ public class PostController {
         return ResponseEntity.ok(postDto);
     }
 
+    @DeleteMapping(path = "/{id}")
+    public ResponseEntity<Void> deletePost(@PathVariable Long id) {
+        postService.deletePost(id);
+        return ResponseEntity.noContent().build();
+    }
+
     @GetMapping(path = "/drafts")
     public ResponseEntity<List<PostDto>> getDrafts(@RequestAttribute Long userId) {
         User loggedInUser = userService.getUserById(userId);
