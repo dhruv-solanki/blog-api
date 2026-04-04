@@ -2,6 +2,7 @@ package com.dhruv.blog.service.impl;
 
 import com.dhruv.blog.domain.CreatePostRequest;
 import com.dhruv.blog.domain.PostStatus;
+import com.dhruv.blog.domain.UpdatePostRequest;
 import com.dhruv.blog.domain.entity.Category;
 import com.dhruv.blog.domain.entity.Post;
 import com.dhruv.blog.domain.entity.Tag;
@@ -10,12 +11,15 @@ import com.dhruv.blog.repository.PostRepository;
 import com.dhruv.blog.service.CategoryService;
 import com.dhruv.blog.service.PostService;
 import com.dhruv.blog.service.TagService;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +29,12 @@ public class PostServiceImpl implements PostService {
     private final TagService tagService;
 
     private static final int WORDS_PER_MINUTE = 200;
+
+    @Override
+    public Post getPost(Long id) {
+        return postRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Post not found with id: " + id));
+    }
 
     @Override
     @Transactional(readOnly = true)
@@ -65,6 +75,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    @Transactional
     public Post createPost(User user, CreatePostRequest request) {
         Category category = categoryService.getCategoryById(request.getCategoryId());
         List<Tag> tags = tagService.getTagByIds(request.getTagIds());
@@ -80,6 +91,37 @@ public class PostServiceImpl implements PostService {
                 .build();
 
         return postRepository.save(newPost);
+    }
+
+    @Override
+    @Transactional
+    public Post updatePost(Long id, UpdatePostRequest updatePostRequest) {
+        Post existingPost = postRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Post not found with id: " + id));
+
+        existingPost.setTitle(updatePostRequest.getTitle());
+        String postContent = updatePostRequest.getContent();
+        existingPost.setContent(postContent);
+        existingPost.setStatus(updatePostRequest.getStatus());
+        existingPost.setReadingTime(calculateReadingTime(postContent));
+
+        Long updatePostRequestCategoryId = updatePostRequest.getCategoryId();
+        if(!existingPost.getCategory().getId().equals(updatePostRequestCategoryId)) {
+            Category newCategory = categoryService.getCategoryById(updatePostRequestCategoryId);
+            existingPost.setCategory(newCategory);
+        }
+
+        Set<Long> existingTagIds = existingPost.getTags()
+                .stream()
+                .map(Tag::getId)
+                .collect(Collectors.toSet());
+        Set<Long> updatePostRequestTagIds = updatePostRequest.getTagIds();
+        if(!existingTagIds.equals(updatePostRequestTagIds)) {
+            List<Tag> newTags = tagService.getTagByIds(updatePostRequestTagIds);
+            existingPost.setTags(new HashSet<>(newTags));
+        }
+
+        return postRepository.save(existingPost);
     }
 
     private Integer calculateReadingTime(String content) {

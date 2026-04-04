@@ -1,8 +1,10 @@
 package com.dhruv.blog.mapper;
 
 import com.dhruv.blog.domain.CreatePostRequest;
+import com.dhruv.blog.domain.UpdatePostRequest;
 import com.dhruv.blog.domain.dto.CreatePostRequestDto;
 import com.dhruv.blog.domain.dto.PostDto;
+import com.dhruv.blog.domain.dto.UpdatePostRequestDto;
 import com.dhruv.blog.domain.entity.Post;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -16,4 +18,6 @@ public interface PostMapper {
     PostDto toDto(Post post);
 
     CreatePostRequest toCreatePostRequest(CreatePostRequestDto dto);
+
+    UpdatePostRequest toUpdatePostRequest(UpdatePostRequestDto dto);
 }
