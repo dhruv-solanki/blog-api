@@ -36,6 +36,7 @@ public class CategoryServiceImpl implements CategoryService {
                 throw new IllegalStateException("Category has posts associated with it");
             }
             categoryRepository.deleteById(id);
+            return;
         }
         throw new IllegalArgumentException("Category with ID: "  + id + " does not exist");
     }
