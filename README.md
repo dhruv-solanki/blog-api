@@ -31,20 +31,20 @@ A simple blog backend built using Spring Boot.
 
 ### 1. Clone the project
 
-```bash id="c6o7h1"
+```bash
 git clone <your-repo-url>
 cd blog
 ```
 
 ### 2. Build the project
 
-```bash id="j9e2d4"
+```bash
 mvn clean install
 ```
 
 ### 3. Run the application
 
-```bash id="v8k3lm"
+```bash
 mvn spring-boot:run
 ```
 
@@ -56,7 +56,7 @@ mvn spring-boot:run
 
 Update your `application.properties`:
 
-```properties id="m5x2zq"
+```properties
 spring.datasource.url=jdbc:postgresql://localhost:5432/blog
 spring.datasource.username=your_username
 spring.datasource.password=your_password
@@ -89,7 +89,7 @@ Use tools like Postman to test APIs.
 
 Run tests using:
 
-```bash id="3e0g7n"
+```bash
 mvn test
 ```
 
@@ -97,10 +97,14 @@ mvn test
 
 ## 📁 Project Structure
 
-* `controller` → REST controllers
-* `service` → business logic
-* `repository` → database layer
-* `domain` → to store entity, dto, and service layer objects`
+* `controller` → Handles HTTP requests and responses
+* `service` → Contains business logic
+* `repository` → Database access layer (JPA)
+* `domain.entity` → Database models
+* `domain.dto` → Request/Response objects
+* `mapper` → Converts Entity ↔ DTO
+* `security` → JWT authentication & Spring Security config
+* `config` → Application configuration
 
 ---
 
